@@ -122,7 +122,11 @@ class ActivityPubController extends BaseController
     }
 
     // Pass off to a handler based on the type of activity received
-
+    $class = '\App\Jobs\ActivityPub\\'.$inbox->type;
+    if(class_exists($class))
+      $class::dispatch($inbox->id);
+    else
+      return response()->json('not supported: '.$inbox->type, 200);
 
     return response()->json('accepted', 202);
   }
