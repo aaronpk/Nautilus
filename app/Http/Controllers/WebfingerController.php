@@ -6,7 +6,7 @@ use Illuminate\Routing\Controller as BaseController;
 use App\User;
 use Request;
 
-class Webfinger extends BaseController
+class WebfingerController extends BaseController
 {
   public function webfinger() {
     $resource = Request::input('resource');
@@ -28,15 +28,15 @@ class Webfinger extends BaseController
     }
 
     return response()->json([
-      'subject' => 'acct:aaronpk@'.parse_url(env('APP_URL'), PHP_URL_HOST),
+      'subject' => 'acct:'.$username.'@'.parse_url(env('APP_URL'), PHP_URL_HOST),
       'aliases' => [
-        env('APP_URL').'/aaronpk',
+        env('APP_URL').'/'.$username,
       ],
       'links' => [
         [
           'rel' => 'self',
           'type' => 'application/activity+json',
-          'href' => env('APP_URL').'/aaronpk'
+          'href' => env('APP_URL').'/'.$username
         ]
       ]
     ]);

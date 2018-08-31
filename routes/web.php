@@ -15,6 +15,3 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/.well-known/webfinger', '\App\Http\Controllers\Webfinger@webfinger');
-
-Route::get('/{username}', '\App\Http\Controllers\UserController@get');

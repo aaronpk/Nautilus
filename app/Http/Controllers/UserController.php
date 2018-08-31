@@ -10,7 +10,6 @@ class UserController extends BaseController
 {
 
   public function get($username) {
-    // Switch on Accept header
 
     $user = User::where('username', $username)->first();
 
@@ -20,6 +19,7 @@ class UserController extends BaseController
       ], 404);
     }
 
+    // Switch on Accept header
     if(request()->wantsJson()) {
       return response()->json([
         "@context" => [

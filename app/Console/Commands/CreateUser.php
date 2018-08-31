@@ -48,6 +48,7 @@ class CreateUser extends Command
       $user->email = $email;
       $user->name = $name;
       $user->password = 'new';
+      $user->resetKeyPair();
       $user->save();
 
       $this->info("Created user");
