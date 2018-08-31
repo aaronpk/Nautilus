@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d5bca48e56bbf3a25645858fcab9c285",
+    "content-hash": "59db34a3e86a3ea690d0c59ca3e0faf4",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -920,6 +920,52 @@
                 "php"
             ],
             "time": "2018-07-15T17:25:16+00:00"
+        },
+        {
+            "name": "p3k/utils",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aaronpk/p3k-utils.git",
+                "reference": "ecd0ba1afca8e586f09792f7be5052e142d3cbde"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aaronpk/p3k-utils/zipball/ecd0ba1afca8e586f09792f7be5052e142d3cbde",
+                "reference": "ecd0ba1afca8e586f09792f7be5052e142d3cbde",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.13",
+                "predis/predis": "1.1.*"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/global.php",
+                    "src/url.php",
+                    "src/utils.php",
+                    "src/date.php",
+                    "src/cache.php",
+                    "src/geo.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aaron Parecki",
+                    "homepage": "https://aaronparecki.com"
+                }
+            ],
+            "description": "Some helpful functions used by https://p3k.io projects",
+            "homepage": "https://github.com/aaronpk/p3k-utils",
+            "time": "2018-03-28T13:44:56+00:00"
         },
         {
             "name": "paragonie/random_compat",

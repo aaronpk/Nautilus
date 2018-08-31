@@ -57,4 +57,12 @@ class User extends Authenticatable
     public function activities() {
       $this->hasMany('\App\Activity');
     }
+
+    public function inboxPath() {
+      return '/' . $this->username . '/inbox';
+    }
+
+    public function outboxPath() {
+      return '/' . $this->username . '/outbox';
+    }
 }

@@ -11,10 +11,6 @@ class Activity extends Model {
     return $this->belongsTo('\App\User');
   }
 
-  public function profile() {
-    return $this->belongsTo('\App\Profile');
-  }
-
   public function setData($array) {
     $this->data = json_encode($array, JSON_UNESCAPED_SLASHES+JSON_PRETTY_PRINT);
   }
@@ -26,7 +22,7 @@ class Activity extends Model {
       'type' => $this->type,
     ];
     if($this->user_id)
-      $json['actor'] => env('APP_URL').'/'.$this->user->username;
+      $json['actor'] = env('APP_URL').'/'.$this->user->username;
     elseif($this->profile_id)
       $json['actor'] = $this->profile->url;
 

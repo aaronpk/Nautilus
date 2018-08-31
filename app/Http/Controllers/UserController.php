@@ -40,8 +40,8 @@ class UserController extends BaseController
         //   "mediaType" => "image/jpeg",
         //   "url" => env('APP_URL')."/images/cover-photo.jpg",
         // ],
-        "inbox" => env('APP_URL').'/'.$user->username.'/inbox',
-        "outbox" => env('APP_URL').'/'.$user->username.'/outbox',
+        "inbox" => env('APP_URL').$user->inboxPath(),
+        "outbox" => env('APP_URL').$user->outboxPath(),
         "publicKey" => [
           "id" => env('APP_URL').'/'.$user->username.'#key',
           "owner" => env('APP_URL')."/".$user->username,

@@ -10,6 +10,10 @@ class Profile extends Model {
     $this->hasMany('\App\Activity');
   }
 
+  public function openssl_public_key() {
+    return openssl_pkey_get_public($this->public_key);
+  }
+
   public static function create($uri) {
     if(preg_match('/.+@.+/', $uri))
       return Profile::createFromWebfinger($uri);
@@ -91,6 +95,11 @@ class Profile extends Model {
 
     if(isset($data['icon']['url']))
       $profile->photo = $data['icon']['url'];
+
+    if(isset($data['publicKey']) && isset($data['publicKey']['id']) && isset($data['publicKey']['publicKeyPem'])) {
+      $profile->keyid = $data['publicKey']['id'];
+      $profile->public_key = $data['publicKey']['publicKeyPem'];
+    }
 
     $profile->data = json_encode($data, JSON_PRETTY_PRINT+JSON_UNESCAPED_SLASHES);
     $profile->save();
