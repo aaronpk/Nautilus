@@ -48,6 +48,7 @@ class CreateUser extends Command
       $user->email = $email;
       $user->name = $name;
       $user->password = 'new';
+      $user->default_timezone = 'America/Los_Angeles';
       $user->resetKeyPair();
       $user->save();
 
