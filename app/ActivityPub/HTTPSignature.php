@@ -26,7 +26,7 @@ class HTTPSignature {
     openssl_sign($stringToSign, $signature, $key, OPENSSL_ALGO_SHA256);
     $signature = base64_encode($signature);
 
-    $signatureHeader = 'keyId="'.env('APP_URL').'/'.$user->username.'#key",headers="'.$signedHeaders.'",algorithm="rsa-sha256",signature="'.$signature.'"';
+    $signatureHeader = 'keyId="'.$user->actorURL().'",headers="'.$signedHeaders.'",algorithm="rsa-sha256",signature="'.$signature.'"';
 
     Log::info('Signature: '.$signatureHeader);
 

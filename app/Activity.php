@@ -20,7 +20,7 @@ class Activity extends Model {
       '@context' => 'https://www.w3.org/ns/activitystreams',
       'id' => env('APP_URL').'/activity/'.$this->id,
       'type' => $this->type,
-      'actor' => env('APP_URL').'/'.$this->user->username,
+      'actor' => $this->user->actorURL(),
     ];
 
     $data = json_decode($this->data, true);

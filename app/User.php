@@ -67,7 +67,13 @@ class User extends Authenticatable
     }
 
     public function actorURL() {
-      return env('APP_URL') . '/' . $this->username;
+      if($this->external_domain) {
+        $actor = 'https://' . $this->external_domain . '/.well-known/user.json';
+      } else {
+        $actor = env('APP_URL') . '/' . $this->username;
+      }
+
+      return $actor;
     }
 
     public function inboxPath() {
