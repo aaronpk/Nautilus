@@ -21,6 +21,7 @@ class Activity extends Model {
       'id' => env('APP_URL').'/activity/'.$this->id,
       'type' => $this->type,
       'actor' => $this->user->actorURL(),
+      'to' => ['https://www.w3.org/ns/activitystreams#Public'],
     ];
 
     $data = json_decode($this->data, true);
