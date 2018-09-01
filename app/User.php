@@ -55,7 +55,15 @@ class User extends Authenticatable
 
 
     public function activities() {
-      $this->hasMany('\App\Activity');
+      return $this->hasMany('\App\Activity');
+    }
+
+    public function followers() {
+      return $this->belongsToMany('\App\Profile', 'followers')->using('App\Follower');
+    }
+
+    public function actorURL() {
+      return env('APP_URL') . '/' . $this->username;
     }
 
     public function inboxPath() {

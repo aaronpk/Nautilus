@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\User, App\Profile, App\Activity;
+use App\Jobs\DeliverActivity;
 use Log;
 
 class Follow extends Command
@@ -71,18 +72,6 @@ class Follow extends Command
       ]);
       $followActivity->save();
 
-      $payload = $followActivity->toJSON();
-
-      $this->info($payload);
-      $headers = $followActivity->sign($user, $profile->inbox);
-
-      $ch = curl_init($profile->inbox);
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-      curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-      curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-      curl_setopt($ch, CURLOPT_HEADER, true);
-      $response = curl_exec($ch);
-      $this->info('Inbox response: '.$response);
-
+      DeliverActivity::dispatch($followActivity, $profile->inbox);
     }
 }

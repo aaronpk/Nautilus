@@ -7,7 +7,7 @@ use Log;
 class Profile extends Model {
 
   public function activities() {
-    $this->hasMany('\App\Activity');
+    return $this->hasMany('\App\Activity');
   }
 
   public function openssl_public_key() {

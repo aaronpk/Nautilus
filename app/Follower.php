@@ -1,9 +1,9 @@
 <?php
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class Follower extends Model {
+class Follower extends Pivot {
 
   public function profile() {
     return $this->belongsTo('\App\Profile');
