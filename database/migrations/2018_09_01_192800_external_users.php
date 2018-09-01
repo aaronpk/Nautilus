@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UserDefaultTimezone extends Migration
+class ExternalUsers extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class UserDefaultTimezone extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('default_timezone', 100)->default('America/Los_Angeles');
+            $table->string('external_domain', 512)->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class UserDefaultTimezone extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropcolumn('default_timezone');
+            $table->dropcolumn('external_domain');
         });
     }
 }

@@ -1,7 +1,7 @@
 <?php
 namespace App\Jobs\ActivityPub;
 use App\Jobs\ActivityPubHandler;
-use App\Inbox, App\Follower, App\Activity;
+use App\Inbox, App\Follower, App\Activity, App\User;
 use Log;
 
 class Follow extends ActivityPubHandler
@@ -23,8 +23,18 @@ class Follow extends ActivityPubHandler
     }
 
     if(!\p3k\url\host_matches($data['object'], env('APP_URL'))) {
-      Log::error('Received a Follow request for an object not on this website');
-      return;
+      // Check if this is a follow request to a hosted account
+      if(parse_url($data['object'], PHP_URL_PATH) == '/.well-known/user.json') {
+        $host = parse_url($data['object'], PHP_URL_HOST);
+        $user = User::where('id', $this->_data->user_id)->first();
+        if($user->external_domain != $host) {
+          Log::error('Received a Follow request for an external URL not hosted by this website');
+          return;
+        }
+      } else {
+        Log::error('Received a Follow request for an object not on this website');
+        return;
+      }
     }
 
     // Insert the follower record
