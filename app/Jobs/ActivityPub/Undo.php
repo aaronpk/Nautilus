@@ -22,7 +22,7 @@ class Undo extends ActivityPubHandler
       return;
     }
 
-    if(!isset($data['object']['type']) && $data['object']['type'] == 'Follow') {
+    if(isset($data['object']['type']) && $data['object']['type'] == 'Follow') {
 
       if(!\p3k\url\host_matches($data['object']['object'], env('APP_URL'))) {
         // Check if this is a follow request to a hosted account
@@ -51,7 +51,7 @@ class Undo extends ActivityPubHandler
       return;
     }
 
-    if(!isset($data['object']['type']) && $data['object']['type'] == 'Create') {
+    if(isset($data['object']['type']) && $data['object']['type'] == 'Create') {
 
     }
 
