@@ -112,21 +112,48 @@ class ActivityPubController extends BaseController
     $inbox->headers = $headers;
     $inbox->verified = $verified;
     $inbox->profile_id = $profile->id;
-    $inbox->save();
 
     if($verified !== 1) {
+      $inbox->save();
       return response()->json([
         'error' => 'Invalid signature',
         'headers' => $headers,
       ], 400);
     }
 
+    // HTTP signature checked out, make sure the "actor" of the activity matches that of the signature
+
+    if(!Request::input('actor')) {
+      $inbox->verified = 0;
+      $inbox->save();
+
+      return response()->json([
+        'error' => 'Request was missing an actor property'
+      ], 400);
+    }
+
+    if(is_string(Request::input('actor'))) {
+      $actor = Request::input('actor');
+    } elseif(is_string(Request::input('actor.id'))) {
+      $actor = Request::input('actor.id');
+    } else {
+      $inbox->verified = 0;
+      $inbox->save();
+
+      return response()->json([
+        'error' => 'The actor provided could not be parsed'
+      ], 400);
+    }
+
+    $inbox->actor = $actor;
+    $inbox->save();
+
     // Pass off to a handler based on the type of activity received
     $class = '\App\Jobs\ActivityPub\\'.$inbox->type;
     if(class_exists($class))
       $class::dispatch($inbox->id);
     else
-      return response()->json('not supported: '.$inbox->type, 200);
+      return response()->json('not supported: '.$inbox->type, 201);
 
     return response()->json('accepted', 202);
   }
