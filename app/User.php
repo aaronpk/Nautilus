@@ -66,6 +66,17 @@ class User extends Authenticatable
       return $this->belongsToMany('\App\Profile', 'followers')->using('App\Follower');
     }
 
+    public function following() {
+      return $this->belongsToMany('\App\Profile', 'following')->using('App\Following');
+    }
+
+    public function follows(Profile $profile) {
+      return (bool)Following::where('user_id', $this->id)
+        ->where('profile_id', $profile->id)
+        ->where('pending', false)
+        ->count();
+    }
+
     public function actorURL() {
       if($this->external_domain) {
         $actor = 'https://' . $this->external_domain . '/.well-known/user.json';

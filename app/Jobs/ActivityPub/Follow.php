@@ -1,7 +1,7 @@
 <?php
 namespace App\Jobs\ActivityPub;
 use App\Jobs\ActivityPubHandler;
-use App\Inbox, App\Follower, App\Activity, App\User;
+use App\Inbox, App\Follower, App\Activity, App\User, App\Profile;
 use Log;
 
 class Follow extends ActivityPubHandler
@@ -22,49 +22,53 @@ class Follow extends ActivityPubHandler
       return;
     }
 
-    if(!\p3k\url\host_matches($data['object'], env('APP_URL'))) {
-      // Check if this is a follow request to a hosted account
-      if(parse_url($data['object'], PHP_URL_PATH) == '/.well-known/user.json') {
-        $host = parse_url($data['object'], PHP_URL_HOST);
-        $user = User::where('id', $this->_data->user_id)->first();
-        if($user->external_domain != $host) {
-          Log::error('Received a Follow request for an external URL not hosted by this website');
-          return;
-        }
-      } else {
-        Log::error('Received a Follow request for an object not on this website');
-        return;
+    $profile = Profile::where('id', $this->_data->profile_id)->first();
+
+    $verify = $this->verifyObjectHost($data['object']);
+    if(!$verify) {
+      Log::error('Received a Follow request for an object not on this website');
+      return;
+    }
+
+    $acceptFollow = true;
+
+    if($this->_user->locked) {
+      // Check if the user who requested to follow is already followed by this user
+      if(!$this->_user->follows($profile)) {
+        Log::warning('Received a Follow request from someone not in the whitelist: '.$profile->url);
+        $acceptFollow = false;
       }
     }
 
-    // Insert the follower record
-
-    $follower = Follower::where('user_id', $this->_data->user_id)
-      ->where('profile_id', $this->_data->profile_id)
-      ->first();
-    if(!$follower) {
-      $follower = new Follower();
-      $follower->user_id = $this->_data->user_id;
-      $follower->profile_id = $this->_data->profile_id;
+    if($acceptFollow) {
+      // Insert the follower record
+      $follower = Follower::where('user_id', $this->_data->user_id)
+        ->where('profile_id', $this->_data->profile_id)
+        ->first();
+      if(!$follower) {
+        $follower = new Follower();
+        $follower->user_id = $this->_data->user_id;
+        $follower->profile_id = $this->_data->profile_id;
+      }
+      $follower->save();
     }
-    $follower->save();
 
-    // Send back the Accept
+    // Send back the Accept/Reject
 
     $object = array_intersect_key($data, array_flip(['id','type','actor','object']));
 
-    $acceptActivity = new Activity();
-    $acceptActivity->type = 'Accept';
-    $acceptActivity->user_id = $this->_data->user_id;
-    $acceptActivity->setData([
+    $responseActivity = new Activity();
+    $responseActivity->type = ($acceptFollow ? 'Accept' : 'Reject');
+    $responseActivity->user_id = $this->_data->user_id;
+    $responseActivity->setData([
       'object' => $object
     ]);
-    $acceptActivity->save();
+    $responseActivity->save();
 
-    $payload = $acceptActivity->toJSON();
+    $payload = $responseActivity->toJSON();
 
     Log::info($payload);
-    $headers = $acceptActivity->sign($this->_data->user, $this->_data->profile->inbox);
+    $headers = $responseActivity->sign($this->_user, $this->_data->profile->inbox);
 
     $ch = curl_init($this->_data->profile->inbox);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

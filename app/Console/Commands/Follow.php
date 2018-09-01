@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\User, App\Profile, App\Activity;
+use App\User, App\Profile, App\Activity, App\Following;
 use App\Jobs\DeliverActivity;
 use Log;
 
@@ -71,6 +71,12 @@ class Follow extends Command
         'object' => $profile->profileid
       ]);
       $followActivity->save();
+
+      $following = new Following();
+      $following->user_id = $user->id;
+      $following->profile_id = $profile->id;
+      $following->pending = true;
+      $following->save();
 
       DeliverActivity::dispatch($followActivity, $profile->inbox);
     }
