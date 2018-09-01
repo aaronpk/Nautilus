@@ -41,7 +41,7 @@ class GenerateToken extends Command
       $user = User::where('username', $this->argument('username'))->first();
 
       if(!$user)
-        $this->error('User not found');
+        return $this->error('User not found');
 
       $token = new Token();
 
