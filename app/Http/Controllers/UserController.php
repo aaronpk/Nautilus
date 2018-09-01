@@ -49,8 +49,12 @@ class UserController extends BaseController
         ]
       ])->header('Content-type', 'application/activity+json');
     } else {
-      return view('profile', [
-      ]);
+      if($user->external_domain) {
+        return redirect('https://' . $user->external_domain . '/');
+      } else {
+        return view('profile', [
+        ]);
+      }
     }
 
   }
