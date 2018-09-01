@@ -33,7 +33,7 @@ class UserController extends BaseController
         "icon" => [
           "type" => "Image",
           "mediaType" => "image/jpeg",
-          "url" => env('APP_URL')."/images/".$user->username.".jpg",
+          "url" => env('APP_URL')."/storage/images/".$user->username.".jpg",
         ],
         // "image" => [
         //   "type" => "Image",
