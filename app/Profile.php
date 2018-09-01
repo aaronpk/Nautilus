@@ -88,7 +88,7 @@ class Profile extends Model {
       $profile->inbox = $data['inbox'];
 
     if(isset($data['endpoints']['sharedInbox']))
-      $profile->shared_inbox = ['endpoints']['sharedInbox'];
+      $profile->shared_inbox = $data['endpoints']['sharedInbox'];
 
     if(isset($data['preferredUsername']))
       $profile->username = $data['preferredUsername'];
