@@ -37,6 +37,10 @@ class Post extends Model {
       'to' => ['https://www.w3.org/ns/activitystreams#Public'],
     ];
 
+    if($this->user->external_domain) {
+      $object['id'] = 'https://' . $this->user->external_domain . '/myactivity.stream/' . $this->id;
+    }
+
     if(isset($data['url']))
       $object['url'] = $data['url'];
 
