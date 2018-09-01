@@ -25,46 +25,9 @@ class UserController extends BaseController
 
     // Switch on Accept header
     if((!$format && request()->wantsJson()) || $format == 'json') {
-      $profile = [
-        "@context" => [
-          "https://www.w3.org/ns/activitystreams",
-          "https://w3id.org/security/v1",
-        ],
-        "id" => $user->actorURL(),
-        "type" => "Person",
-        "preferredUsername" => $user->username,
-        "url" => $user->actorURL(),
-        "icon" => [
-          "type" => "Image",
-          "mediaType" => "image/jpeg",
-          "url" => env('APP_URL')."/storage/images/".$user->username.".jpg",
-        ],
-        "inbox" => env('APP_URL').$user->inboxPath(),
-        "outbox" => env('APP_URL').$user->outboxPath(),
-        "featured" => env('APP_URL').$user->featuredPath(),
-        "publicKey" => [
-          "id" => $user->actorURL(),
-          "owner" => $user->actorURL(),
-          "publicKeyPem" => $user->public_key
-        ]
-      ];
-
-      if($user->photo) {
-        $profile['icon']['url'] = $user->photo;
-      }
-
-      if($user->banner) {
-        $profile['image'] = [
-          'type' => 'image',
-          'mediaType' => 'image/jpeg',
-          'url' => $user->banner,
-        ];
-      }
+      $profile = $user->toActivityStreamsObject();
 
       if($user->external_domain) {
-        // Override some of the properties
-        $profile['url'] = 'https://' . $user->external_domain;
-
         // Add the Webfinger bits to this response
         $profile['---webfinger---'] = '---webfinger---';
         $profile['subject'] = 'acct:' . $user->username . '@' . $user->external_domain;

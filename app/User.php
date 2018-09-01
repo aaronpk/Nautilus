@@ -98,4 +98,49 @@ class User extends Authenticatable
     public function featuredPath() {
       return '/' . $this->username . '/featured';
     }
+
+    public function toActivityStreamsObject() {
+      $profile = [
+        "@context" => [
+          "https://www.w3.org/ns/activitystreams",
+          "https://w3id.org/security/v1",
+        ],
+        "id" => $this->actorURL(),
+        "type" => "Person",
+        "preferredUsername" => $this->username,
+        "url" => $this->actorURL(),
+        "icon" => [
+          "type" => "Image",
+          "mediaType" => "image/jpeg",
+          "url" => env('APP_URL')."/storage/images/".$this->username.".jpg",
+        ],
+        "inbox" => env('APP_URL').$this->inboxPath(),
+        "outbox" => env('APP_URL').$this->outboxPath(),
+        "featured" => env('APP_URL').$this->featuredPath(),
+        "publicKey" => [
+          "id" => $this->actorURL(),
+          "owner" => $this->actorURL(),
+          "publicKeyPem" => $this->public_key
+        ]
+      ];
+
+      if($this->photo) {
+        $profile['icon']['url'] = $this->photo;
+      }
+
+      if($this->banner) {
+        $profile['image'] = [
+          'type' => 'image',
+          'mediaType' => 'image/jpeg',
+          'url' => $this->banner,
+        ];
+      }
+
+      if($this->external_domain) {
+        // Override some of the properties
+        $profile['url'] = 'https://' . $this->external_domain;
+      }
+
+      return $profile;
+    }
 }

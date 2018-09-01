@@ -44,7 +44,7 @@ class SendProfileUpdate extends Command
       $activity->type = 'Update';
       $activity->user_id = $user->id;
       $activity->setData([
-        'object' => $user->actorURL()
+        'object' => $user->toActivityStreamsObject()
       ]);
       $activity->save();
 
