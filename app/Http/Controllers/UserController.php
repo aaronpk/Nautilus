@@ -21,15 +21,15 @@ class UserController extends BaseController
 
     // Switch on Accept header
     if(request()->wantsJson()) {
-      return response()->json([
+      $profile = [
         "@context" => [
           "https://www.w3.org/ns/activitystreams",
           "https://w3id.org/security/v1"
         ],
-        "id" => env('APP_URL')."/".$user->username,
+        "id" => $user->actorURL(),
         "type" => "Person",
         "preferredUsername" => $user->username,
-        "url" => env('APP_URL').'/'.$user->username,
+        "url" => $user->actorURL(),
         "icon" => [
           "type" => "Image",
           "mediaType" => "image/jpeg",
@@ -43,11 +43,29 @@ class UserController extends BaseController
         "inbox" => env('APP_URL').$user->inboxPath(),
         "outbox" => env('APP_URL').$user->outboxPath(),
         "publicKey" => [
-          "id" => env('APP_URL').'/'.$user->username.'#key',
-          "owner" => env('APP_URL')."/".$user->username,
+          "id" => $user->actorURL(),
+          "owner" => $user->actorURL(),
           "publicKeyPem" => $user->public_key
         ]
-      ])->header('Content-type', 'application/activity+json');
+      ];
+
+      if($user->external_domain) {
+        // Override some of the properties
+        $profile['url'] = 'https://' . $user->external_domain;
+
+        // Add the Webfinger bits to this response
+        $profile['---webfinger---'] = '---webfinger---';
+        $profile['subject'] = 'acct:' . $user->username . '@' . $user->external_domain;
+        $profile['links'] = [
+          [
+            'rel' => 'self',
+            'type' => 'application/activity+json',
+            'href' => 'https://' . $user->external_domain . '/.well-known/user.json',
+          ]
+        ];
+      }
+
+      return response()->json($profile)->header('Content-type', 'application/activity+json');
     } else {
       if($user->external_domain) {
         return redirect('https://' . $user->external_domain . '/');
