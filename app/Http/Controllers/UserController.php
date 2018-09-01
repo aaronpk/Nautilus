@@ -39,11 +39,6 @@ class UserController extends BaseController
           "mediaType" => "image/jpeg",
           "url" => env('APP_URL')."/storage/images/".$user->username.".jpg",
         ],
-        // "image" => [
-        //   "type" => "Image",
-        //   "mediaType" => "image/jpeg",
-        //   "url" => env('APP_URL')."/images/cover-photo.jpg",
-        // ],
         "inbox" => env('APP_URL').$user->inboxPath(),
         "outbox" => env('APP_URL').$user->outboxPath(),
         "featured" => env('APP_URL').$user->featuredPath(),
@@ -53,6 +48,18 @@ class UserController extends BaseController
           "publicKeyPem" => $user->public_key
         ]
       ];
+
+      if($user->photo) {
+        $profile['icon']['url'] = $user->photo;
+      }
+
+      if($user->banner) {
+        $profile['image'] = [
+          'type' => 'image',
+          'mediaType' => 'image/jpeg',
+          'url' => $user->banner,
+        ];
+      }
 
       if($user->external_domain) {
         // Override some of the properties
