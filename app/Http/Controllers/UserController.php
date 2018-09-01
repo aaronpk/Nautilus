@@ -74,8 +74,7 @@ class UserController extends BaseController
       if($user->external_domain) {
         return redirect('https://' . $user->external_domain . '/');
       } else {
-        return view('profile', [
-        ]);
+        return $this->get($username, 'json');
       }
     }
 
