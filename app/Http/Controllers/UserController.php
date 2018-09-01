@@ -9,7 +9,11 @@ use Request;
 class UserController extends BaseController
 {
 
-  public function get($username) {
+  public function get_json($username) {
+    return $this->get($username, 'json');
+  }
+
+  public function get($username, $format=false) {
 
     $user = User::where('username', $username)->first();
 
@@ -20,7 +24,7 @@ class UserController extends BaseController
     }
 
     // Switch on Accept header
-    if(request()->wantsJson()) {
+    if((!$format && request()->wantsJson()) || $format == 'json') {
       $profile = [
         "@context" => [
           "https://www.w3.org/ns/activitystreams",
