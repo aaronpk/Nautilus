@@ -38,7 +38,7 @@ class ActivityPubController extends BaseController
     $inbox->profile_id = 0;
     $inbox->type = Request::input('type', '');
     $inbox->verified = false;
-    $inbox->data = $body;
+    $inbox->data = json_encode(json_decode($body, true), JSON_PRETTY_PRINT+JSON_UNESCAPED_SLASHES);
     $inbox->signature = Request::header('signature', '');
     $inbox->headers = '';
     $inbox->save();
