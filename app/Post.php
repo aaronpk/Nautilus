@@ -37,13 +37,14 @@ class Post extends Model {
       'to' => ['https://www.w3.org/ns/activitystreams#Public'],
     ];
 
-    if(isset($data['content'])) {
-      $object['content'] = $data['content']['text'];
-    }
+    if(isset($data['url']))
+      $object['url'] = $data['url'];
 
-    if(isset($data['name'])) {
+    if(isset($data['content']))
+      $object['content'] = $data['content']['text'];
+
+    if(isset($data['name']))
       $object['name'] = $data['name'];
-    }
 
     // TODO: tags and mentions
 
