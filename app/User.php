@@ -94,4 +94,8 @@ class User extends Authenticatable
     public function outboxPath() {
       return '/' . $this->username . '/outbox';
     }
+
+    public function featuredPath() {
+      return '/' . $this->username . '/featured';
+    }
 }

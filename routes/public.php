@@ -6,6 +6,7 @@ Route::get('/{username}.json', '\App\Http\Controllers\UserController@get_json');
 Route::get('/{username}', '\App\Http\Controllers\UserController@get');
 Route::post('/{username}/inbox', '\App\Http\Controllers\ActivityPubController@postInbox');
 Route::get('/{username}/outbox', '\App\Http\Controllers\ActivityPubController@getOutbox');
+Route::get('/{username}/featured', '\App\Http\Controllers\ActivityPubController@featuredPosts');
 
 Route::get('/{username}/{post_id}', '\App\Http\Controllers\PostController@post_permalink');
 

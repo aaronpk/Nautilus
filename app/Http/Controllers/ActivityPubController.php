@@ -167,9 +167,33 @@ class ActivityPubController extends BaseController
       '@context' => [
          'https://www.w3.org/ns/activitystreams'
       ],
-      'id' => env('APP_URL').'/'.$this->user->username.'/outbox',
+      'id' => env('APP_URL').$this->user->outboxPath(),
       'type' => 'OrderedCollection',
       'totalItems' => $this->user->posts()->count(),
+    ]);
+  }
+
+  public function featuredPosts($username) {
+    $check = $this->loadUser($username);
+    if($check !== true)
+      return $check;
+
+    $query = $this->user->posts()->where('pinned', true)
+      ->orderByDesc('published')->limit(3)->get();
+    $posts = [];
+
+    foreach($query as $post) {
+      $posts[] = $post->toActivityStreamsObject();
+    }
+
+    return response()->json([
+      '@context' => [
+         'https://www.w3.org/ns/activitystreams'
+      ],
+      'id' => env('APP_URL').$this->user->featuredPath(),
+      'type' => 'OrderedCollection',
+      'totalItems' => count($posts),
+      'orderedItems' => $posts,
     ]);
   }
 

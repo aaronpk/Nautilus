@@ -28,7 +28,7 @@ class UserController extends BaseController
       $profile = [
         "@context" => [
           "https://www.w3.org/ns/activitystreams",
-          "https://w3id.org/security/v1"
+          "https://w3id.org/security/v1",
         ],
         "id" => $user->actorURL(),
         "type" => "Person",
@@ -46,6 +46,7 @@ class UserController extends BaseController
         // ],
         "inbox" => env('APP_URL').$user->inboxPath(),
         "outbox" => env('APP_URL').$user->outboxPath(),
+        "featured" => env('APP_URL').$user->featuredPath(),
         "publicKey" => [
           "id" => $user->actorURL(),
           "owner" => $user->actorURL(),
