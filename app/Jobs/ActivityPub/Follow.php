@@ -51,11 +51,13 @@ class Follow extends ActivityPubHandler
 
     // Send back the Accept
 
+    $object = array_intersect_key($data, array_flip(['id','type','actor','object']));
+
     $acceptActivity = new Activity();
     $acceptActivity->type = 'Accept';
     $acceptActivity->user_id = $this->_data->user_id;
     $acceptActivity->setData([
-      'object' => $this->_data->profile->profileid
+      'object' => $object
     ]);
     $acceptActivity->save();
 
