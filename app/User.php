@@ -58,6 +58,10 @@ class User extends Authenticatable
       return $this->hasMany('\App\Activity');
     }
 
+    public function posts() {
+      return $this->hasMany('\App\Post');
+    }
+
     public function followers() {
       return $this->belongsToMany('\App\Profile', 'followers')->using('App\Follower');
     }

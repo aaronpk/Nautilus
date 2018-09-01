@@ -169,7 +169,7 @@ class ActivityPubController extends BaseController
       ],
       'id' => env('APP_URL').'/'.$this->user->username.'/outbox',
       'type' => 'OrderedCollection',
-      'totalItems' => 1,
+      'totalItems' => $this->user->posts()->count(),
     ]);
   }
 
