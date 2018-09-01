@@ -59,7 +59,7 @@ class Follow extends Command
       }
 
       if(!$profile->inbox && !$profile->shared_inbox) {
-        $this->error('Could not find inbox for '.$profile->url);
+        $this->error('Could not find inbox for '.$profile->profileid);
         return;
       }
 
@@ -67,7 +67,7 @@ class Follow extends Command
       $followActivity->type = 'Follow';
       $followActivity->user_id = $user->id;
       $followActivity->setData([
-        'object' => $profile->url
+        'object' => $profile->profileid
       ]);
       $followActivity->save();
 

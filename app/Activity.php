@@ -20,11 +20,8 @@ class Activity extends Model {
       '@context' => 'https://www.w3.org/ns/activitystreams',
       'id' => env('APP_URL').'/activity/'.$this->id,
       'type' => $this->type,
+      'actor' => env('APP_URL').'/'.$this->user->username,
     ];
-    if($this->user_id)
-      $json['actor'] = env('APP_URL').'/'.$this->user->username;
-    elseif($this->profile_id)
-      $json['actor'] = $this->profile->url;
 
     $data = json_decode($this->data, true);
     $json = array_merge($json, $data);

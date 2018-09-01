@@ -75,11 +75,14 @@ class Profile extends Model {
   }
 
   public static function createFromProfile($data) {
-    $profile = Profile::where('url', $data['id'])->first();
+    $profile = Profile::where('profileid', $data['id'])->first();
     if(!$profile) {
       $profile = new Profile();
-      $profile->url = $data['id'];
+      $profile->profileid = $data['id'];
     }
+
+    if(isset($data['url']))
+      $profile->url = $data['url'];
 
     if(isset($data['inbox']))
       $profile->inbox = $data['inbox'];
