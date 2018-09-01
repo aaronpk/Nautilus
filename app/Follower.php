@@ -5,6 +5,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class Follower extends Pivot {
 
+  protected $table = 'followers';
+
   public function profile() {
     return $this->belongsTo('\App\Profile');
   }
