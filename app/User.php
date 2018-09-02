@@ -124,8 +124,8 @@ class User extends Authenticatable
         ]
       ];
 
-      if($this->summary) {
-        $profile['summary'] = $this->summary;
+      if($this->bio) {
+        $profile['summary'] = $this->bio;
       }
 
       if($this->photo) {
