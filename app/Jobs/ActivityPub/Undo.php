@@ -8,7 +8,7 @@ class Undo extends ActivityPubHandler
 {
   public function handle()
   {
-    Log::info('Handling undo request '.$this->_data->id);
+    Log::info('Handling Undo request '.$this->_data->id);
 
     $data = json_decode($this->_data->data, true);
 

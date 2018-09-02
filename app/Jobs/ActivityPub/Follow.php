@@ -8,7 +8,7 @@ class Follow extends ActivityPubHandler
 {
   public function handle()
   {
-    Log::info('Handling follow request '.$this->_data->id);
+    Log::info('Handling Follow request '.$this->_data->id);
 
     $data = json_decode($this->_data->data, true);
 
