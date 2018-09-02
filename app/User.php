@@ -124,6 +124,10 @@ class User extends Authenticatable
         ]
       ];
 
+      if($this->summary) {
+        $profile['summary'] = $this->summary;
+      }
+
       if($this->photo) {
         $profile['icon']['url'] = $this->photo;
       }
