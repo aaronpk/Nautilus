@@ -16,10 +16,10 @@ class HTTPSignature {
     $headers = array_merge($headers, $addlHeaders);
 
     $stringToSign = self::_headersToSigningString($headers);
-    Log::info('String to sign: '.$stringToSign);
+    #Log::info('String to sign: '.$stringToSign);
 
     $signedHeaders = implode(' ', array_map('strtolower', array_keys($headers)));
-    Log::info('Signed headers: '.$signedHeaders);
+    #Log::info('Signed headers: '.$signedHeaders);
 
     $key = openssl_pkey_get_private($user->private_key);
 
@@ -28,7 +28,7 @@ class HTTPSignature {
 
     $signatureHeader = 'keyId="'.$user->actorURL().'",headers="'.$signedHeaders.'",algorithm="rsa-sha256",signature="'.$signature.'"';
 
-    Log::info('Signature: '.$signatureHeader);
+    #Log::info('Signature: '.$signatureHeader);
 
     unset($headers['(request-target)']);
 
