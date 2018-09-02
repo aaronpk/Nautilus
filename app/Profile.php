@@ -15,10 +15,10 @@ class Profile extends Model {
   }
 
   public static function create($uri) {
-    if(preg_match('/.+@.+/', $uri))
-      return Profile::createFromWebfinger($uri);
-    else
+    if(preg_match('/^http/', $uri))
       return Profile::createFromURL($uri);
+    else
+      return Profile::createFromWebfinger($uri);
   }
 
   public static function createFromURL($url) {
