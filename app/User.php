@@ -140,6 +140,18 @@ class User extends Authenticatable
         ];
       }
 
+      if($this->properties) {
+        $profile['attachment'] = [];
+        $properties = json_decode($this->properties, true);
+        foreach($properties as $k=>$v) {
+          $profile['attachment'][] = [
+            'type' => 'PropertyValue',
+            'name' => $k,
+            'value' => $v,
+          ];
+        }
+      }
+
       if($this->external_domain) {
         // Override some of the properties
         $profile['url'] = 'https://' . $this->external_domain;
