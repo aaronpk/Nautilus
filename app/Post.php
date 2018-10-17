@@ -38,7 +38,7 @@ class Post extends Model {
     ];
 
     if($this->user->external_domain) {
-      $object['id'] = 'https://' . $this->user->external_domain . '/myactivity.stream/' . $this->id;
+      $object['id'] = 'https://' . $this->user->external_domain . '/activitypub/' . $this->id;
     }
 
     if(isset($data['url']))

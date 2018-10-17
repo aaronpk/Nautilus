@@ -31,6 +31,15 @@ Save the below as a file named: `https://example.com/.well-known/host-meta`
 </XRD>
 ```
 
+In order for the permalinks of your posts to also live on your domain, you'll need to create an HTTP redirect rule from your server to this service. In nginx, you can create a rewrite rule such as this:
+
+```
+rewrite ^/activitypub/(.+) https://proxy.example.com/username/$1;
+```
+
+Your posts will be identified with a URL on your own domain this way, so that you continue to own the permalinks. This rewrite is required in order for Mastodon and other servers to be able to fetch the JSON version of your posts.
+
+
 ## Running
 
 This project uses the Laravel framework. Please refer to the [Laravel Configuration Guide](https://laravel.com/docs/5.6/configuration) for more details.
