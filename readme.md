@@ -4,16 +4,18 @@ This project is meant to run as a standalone service to deliver posts from your 
 
 ## Setup
 
+These instructions assume you've deployed this proxy service to `proxy.example.com` and that your primary domain that you want to use for your ActivityPub identity is `example.com`.
+
 Create a user account in this service
 
 ```
 $ php artisan user:create username email name
 ```
 
-Fetch the JSON profile to serve on your domain
+Fetch the JSON profile from this service to serve on your domain
 
 ```
-$ curl https://myactivity.stream/username.json
+$ curl https://proxy.example.com/username.json
 ```
 
 Save that file on your own website in a file named:
