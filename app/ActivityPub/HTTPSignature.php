@@ -8,10 +8,11 @@ use DateTime;
 class HTTPSignature {
 
   public static function sign(User &$user, $url, $body=false, $addlHeaders=[]) {
+    $digest = false;
     if($body)
       $digest = self::_digest($body);
 
-    $headers = self::_headersToSign($url, $body ? $digest : false);
+    $headers = self::_headersToSign($url, $digest);
 
     $headers = array_merge($headers, $addlHeaders);
 
